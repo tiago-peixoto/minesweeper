@@ -1,7 +1,7 @@
 <template>
   <div id="minesweeper">
     <button @click="startOver">{{ status === 'BOOM' ? '😵' : status === 'WIN' ? '🤣' : '🙂' }}</button>
-    <table>
+    <table border="1" cellspacing="0">
       <tbody>
         <tr v-for="(cols, row) in grid" :key="row">
           <td v-for="(value, col) in cols" :key="col"
@@ -45,6 +45,9 @@ export default Vue.extend({
       grid
     }
   },
+  mounted () {
+    this.startOver()
+  },
   methods: {
     startOver () {
       this.revealeds = []
@@ -57,6 +60,7 @@ export default Vue.extend({
       if (this.isMarked(row, col)) return
       if (this.isRevealed(row, col)) return
       if (this.status === 'BOOM') return
+      if (this.status === 'WIN') return
       if (this.isMined(row, col)) {
         this.revealAllMines()
         this.status = 'BOOM'
@@ -75,6 +79,7 @@ export default Vue.extend({
     markCell (row: number, col: number) {
       if (this.isRevealed(row, col)) return
       if (this.status === 'BOOM') return
+      if (this.status === 'WIN') return
       if (!this.isMarked(row, col)) {
         this.markeds.push([row, col])
       } else {
